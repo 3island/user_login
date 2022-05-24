@@ -1,0 +1,20 @@
+p {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+}
+
+span {
+  padding-right: 20px;
+}
+
+.container {
+  text-align: center;
+  background-color: rgb(242, 245, 248);
+  margin: auto;
+  width: 600px;
+  padding: 30px 0;
+}
