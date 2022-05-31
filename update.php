@@ -1,15 +1,14 @@
-<?php 
+<?php
 include('functions.php');
 
 // var_dump($_POST);
 // exit();
 
-
 // !issetで確認
 if (
   !isset($_POST['userName']) || $_POST['userName']=='' ||
-  !isset($_POST['email']) || $_POST['email']=='' ||
-  !isset($_POST['userPassword']) || $_POST['userPassword']==''
+  !isset($_POST['userPassword']) || $_POST['userPassword']=='' ||
+  !isset($_POST['id']) || $_POST['id']=='' 
 ) {
   exit('ParamError');
 }
@@ -17,22 +16,23 @@ if (
 
 // ＄_POSTできたデータを変数に入れる
 $userName = $_POST['userName'];
-$email = $_POST['email'];
 $password = $_POST['userPassword'];
+$id = $_POST['id'];
 
 
 // DB接続
 $pdo = connect_to_db();
 
+
 // sql作成＆実行
-$sql = 'INSERT INTO user_table (id, userName, email, userPassword, is_admin, is_deleted, created_at, updated_at) VALUES (NULL, :userName, :email, :userPassword, 0, 0, now(), now())';
+$sql = 'UPDATE user_table SET userName = :userName, userPassword = :userPassword WHERE id=:id';
 
 $stmt = $pdo->prepare($sql);
 
 // バインド変数を設定
 $stmt->bindValue(':userName', $userName, PDO::PARAM_STR);
-$stmt->bindValue(':email', $email, PDO::PARAM_STR);
 $stmt->bindValue(':userPassword', $password, PDO::PARAM_STR);
+$stmt->bindValue(':id', $id, PDO::PARAM_STR);
 
 // SQL実行（実行に失敗すると `sql error ...` が出力される）
 try {
@@ -46,3 +46,6 @@ try {
 // 画面移動
 header('Location:read.php');
 exit();
+
+
+?>

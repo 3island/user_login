@@ -1,17 +1,8 @@
 <?php
-
+include('functions.php');
 
 // DB接続
-$dbn ='mysql:dbname=user_test_table;charset=utf8mb4;port=3306;host=localhost';
-$user = 'root';
-$pwd = '';
-
-try {
-  $pdo = new PDO($dbn, $user, $pwd);
-} catch (PDOException $e) {
-  echo json_encode(["db error" => "{$e->getMessage()}"]);
-  exit();
-}
+$pdo = connect_to_db();
 
 
 // sql作成＆実行 欲しいデータをDBから取ってくる
@@ -30,6 +21,8 @@ try {
     <td>{$record['email']}</td>
     <td>{$record['userPassword']}</td>
     <td>{$record['created_at']}</td>
+    <td><a href='edit.php?id={$record["id"]}'>edit</a></td>
+    <td><a href='delete.php?id={$record["id"]}'>delete</a></td>
     </tr>";
   }
 } catch (PDOException $e) {

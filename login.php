@@ -1,45 +1,3 @@
-<?php
-// var_dump($_POST);
-// exit();
-
-
-// DB接続
-$dbn ='mysql:dbname=user_test_table;charset=utf8mb4;port=3306;host=localhost';
-$user = 'root';
-$pwd = '';
-
-try {
-  $pdo = new PDO($dbn, $user, $pwd);
-} catch (PDOException $e) {
-  echo json_encode(["db error" => "{$e->getMessage()}"]);
-  exit();
-}
-
-
-$sql = 'SELECT email, userPassword FROM user_table';
-$stmt = $pdo->prepare($sql);
-
-try {
-  $status = $stmt->execute();
-  // ＄fetch Allで＄resultに入れてforeachで表示したい形式で$outputに入れる
-  $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  $email_data = '';
-  $password_data = '';
-  foreach($result as $record) {
-    $email_data .= "{$record['email']}";
-  }
-
-  foreach($result as $record) {
-    $password_data .= "{$record['userPassword']}";
-  }
-} catch (PDOException $e) {
-  echo json_encode(["sql error" => "{$e->getMessage()}"]);
-  exit();
-}
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +10,7 @@ try {
 </head>
 <body>
   <div class="container">
-    <form>
+    <form action="login_act.php" method="POST">
     <fieldset>
       <legend>Login</legend>
 
@@ -60,7 +18,7 @@ try {
       <div class="row mb-3">
         <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
         <div class="col-sm-10">
-          <input type="email" class="form-control" id="inputEmail3">
+          <input type="email" class="form-control" id="inputEmail3" name="email">
         </div>
       </div>
 
@@ -68,7 +26,7 @@ try {
       <div class="mb-3 row">
         <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword">
+          <input type="password" class="form-control" id="inputPassword" name="userPassword">
         </div>
       </div>
 
@@ -83,60 +41,4 @@ try {
     </form>
   </div>
 </body>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-
-  // phpから持ってきたデータを変数に入れる
-  const email_data = <?= json_encode($email_data) ?>;
-  console.log(email_data);
-
-  const password_data = <?= json_encode($password_data) ?>;
-  console.log(password_data);
-
-
-  // emailの入力値
-  let email = $('#inputEmail3').val();
-  // console.log(email);
-  // passwordの入力値
-  let password = $('#inputPassword').val();
-  // console.log(password);
-
-
-  // ボタン押すと発火
-  $('#login').on('click', function() {
-
-  // emailの入力値
-  const email = $('#inputEmail3').val();
-  console.log(email);
-  console.log($('#inputEmail3').val());
-  // passwordの入力値
-  const password = $('#inputPassword').val();
-  console.log(password);
-  console.log($('#inputPassword').val());
-
-
-  // phpから持ってきたデータを変数に入れる
-  const email_data = <?= json_encode($email_data) ?>;
-  console.log(email_data);
-
-  const password_data = <?= json_encode($password_data) ?>;
-  console.log(password_data);
-
-  // 入力値と登録しているデータと照合
-    if (email === email_data && password === password_data) {
-      console.log('login ok!');
-      // $('#output').text('OK!');
-      open("https://localhost/G's/user_test_php/user.php");
-    } else {
-      console.log('No login!')
-      // $('#output').text('NO!');
-    }
-    
-  });
-
-
-  
-</script>
 </html>
